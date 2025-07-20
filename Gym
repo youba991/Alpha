@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>GYM Countdown</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 36px; /* أكبر */
+    }
+
+    .countdown {
+      font-size: 50px; /* أكبر */
+      margin-top: 30px;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+
+    /* تكبير الساعة الرملية */
+    .hourglassBackground {
+      position: relative;
+      background-color: rgb(71, 60, 60);
+      height: 200px; /* أكبر */
+      width: 200px;
+      border-radius: 50%;
+      margin: 40px auto;
+    }
+
+    .hourglassContainer {
+      position: absolute;
+      top: 45px;
+      left: 70px;
+      width: 60px;
+      height: 110px;
+      animation: hourglassRotate 2s ease-in 0s infinite;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .hourglassContainer div,
+    .hourglassContainer div:before,
+    .hourglassContainer div:after {
+      transform-style: preserve-3d;
+    }
+
+    @keyframes hourglassRotate {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(180deg); }
+      100% { transform: rotateX(180deg); }
+    }
+
+    .hourglassCapTop { top: 0; }
+    .hourglassCapTop:before { top: -25px; }
+    .hourglassCapTop:after { top: -20px; }
+
+    .hourglassCapBottom { bottom: 0; }
+    .hourglassCapBottom:before { bottom: -25px; }
+    .hourglassCapBottom:after { bottom: -20px; }
+
+    .hourglassGlassTop {
+      transform: rotateX(90deg);
+      position: absolute;
+      top: -16px;
+      left: 3px;
+      border-radius: 50%;
+      width: 54px; /* أكبر */
+      height: 54px;
+      background-color: #999999;
+    }
+
+    .hourglassGlass {
+      perspective: 100px;
+      position: absolute;
+      top: 42px;
+      left: 25px;
+      width: 10px;
+      height: 6px;
+      background-color: #999999;
+      opacity: 0.5;
+    }
+
+    .hourglassGlass:before,
+    .hourglassGlass:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background-color: #999999;
+      left: -20px;
+      width: 54px;
+      height: 35px;
+    }
+
+    .hourglassGlass:before {
+      top: -33px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .hourglassGlass:after {
+      bottom: -33px;
+      border-radius: 25px 25px 0 0;
+    }
+
+    .hourglassCurves:before,
+    .hourglassCurves:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 42px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #333;
+      animation: hideCurves 2s ease-in 0s infinite;
+    }
+
+    .hourglassCurves:before { left: 15px; }
+    .hourglassCurves:after { left: 35px; }
+
+    @keyframes hideCurves {
+      0%, 40%, 100% { opacity: 1; }
+      25%, 30% { opacity: 0; }
+    }
+
+    .hourglassSandStream:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 27px;
+      width: 4px;
+      background-color: white;
+      animation: sandStream1 2s ease-in 0s infinite;
+    }
+
+    .hourglassSandStream:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 45px;
+      left: 22px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid #fff;
+      animation: sandStream2 2s ease-in 0s infinite;
+    }
+
+    @keyframes sandStream1 {
+      0%, 50% { height: 0; top: 45px; }
+      60%, 85% { height: 40px; top: 10px; }
+      100% { height: 0; top: 10px; }
+    }
+
+    @keyframes sandStream2 {
+      0%, 50%, 91%, 100% { opacity: 0; }
+      51%, 90% { opacity: 1; }
+    }
+
+    .hourglassSand:before,
+    .hourglassSand:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 6px;
+      background-color: white;
+    }
+
+    .hourglassSand:before {
+      top: 10px;
+      width: 45px;
+      border-radius: 3px 3px 30px 30px;
+      animation: sandFillup 2s ease-in 0s infinite;
+    }
+
+    .hourglassSand:after {
+      border-radius: 30px 30px 3px 3px;
+      animation: sandDeplete 2s ease-in 0s infinite;
+    }
+
+    @keyframes sandFillup {
+      0%, 60% { opacity: 0; height: 0; }
+      100% { opacity: 1; height: 20px; }
+    }
+
+    @keyframes sandDeplete {
+      0%, 1%, 24% {
+        opacity: 1;
+        top: 60px;
+        height: 20px;
+        width: 42px;
+        left: 6px;
+      }
+
+      25%, 50% {
+        top: 56px;
+      }
+
+      90% {
+        height: 0;
+        width: 12px;
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⏳ الذهاب إلى الجيم مع Amine و Malek</h1>
+
+  <div class="hourglassBackground">
+    <div class="hourglassContainer">
+      <div class="hourglassCapTop"></div>
+      <div class="hourglassGlassTop"></div>
+      <div class="hourglassGlass"></div>
+      <div class="hourglassCurves"></div>
+      <div class="hourglassSandStream"></div>
+      <div class="hourglassSand"></div>
+      <div class="hourglassCapBottom"></div>
+    </div>
+  </div>
+
+  <div class="countdown" id="timer">--:--:--</div>
+
+  <script>
+    const targetTime = new Date();
+    targetTime.setHours(targetTime.getHours() + 2);
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").innerText = "🚀 حان وقت الذهاب!";
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerText =
+        `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>GYM Countdown</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 36px; /* أكبر */
+    }
+
+    .countdown {
+      font-size: 50px; /* أكبر */
+      margin-top: 30px;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+
+    /* تكبير الساعة الرملية */
+    .hourglassBackground {
+      position: relative;
+      background-color: rgb(71, 60, 60);
+      height: 200px; /* أكبر */
+      width: 200px;
+      border-radius: 50%;
+      margin: 40px auto;
+    }
+
+    .hourglassContainer {
+      position: absolute;
+      top: 45px;
+      left: 70px;
+      width: 60px;
+      height: 110px;
+      animation: hourglassRotate 2s ease-in 0s infinite;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .hourglassContainer div,
+    .hourglassContainer div:before,
+    .hourglassContainer div:after {
+      transform-style: preserve-3d;
+    }
+
+    @keyframes hourglassRotate {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(180deg); }
+      100% { transform: rotateX(180deg); }
+    }
+
+    .hourglassCapTop { top: 0; }
+    .hourglassCapTop:before { top: -25px; }
+    .hourglassCapTop:after { top: -20px; }
+
+    .hourglassCapBottom { bottom: 0; }
+    .hourglassCapBottom:before { bottom: -25px; }
+    .hourglassCapBottom:after { bottom: -20px; }
+
+    .hourglassGlassTop {
+      transform: rotateX(90deg);
+      position: absolute;
+      top: -16px;
+      left: 3px;
+      border-radius: 50%;
+      width: 54px; /* أكبر */
+      height: 54px;
+      background-color: #999999;
+    }
+
+    .hourglassGlass {
+      perspective: 100px;
+      position: absolute;
+      top: 42px;
+      left: 25px;
+      width: 10px;
+      height: 6px;
+      background-color: #999999;
+      opacity: 0.5;
+    }
+
+    .hourglassGlass:before,
+    .hourglassGlass:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background-color: #999999;
+      left: -20px;
+      width: 54px;
+      height: 35px;
+    }
+
+    .hourglassGlass:before {
+      top: -33px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .hourglassGlass:after {
+      bottom: -33px;
+      border-radius: 25px 25px 0 0;
+    }
+
+    .hourglassCurves:before,
+    .hourglassCurves:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 42px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #333;
+      animation: hideCurves 2s ease-in 0s infinite;
+    }
+
+    .hourglassCurves:before { left: 15px; }
+    .hourglassCurves:after { left: 35px; }
+
+    @keyframes hideCurves {
+      0%, 40%, 100% { opacity: 1; }
+      25%, 30% { opacity: 0; }
+    }
+
+    .hourglassSandStream:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 27px;
+      width: 4px;
+      background-color: white;
+      animation: sandStream1 2s ease-in 0s infinite;
+    }
+
+    .hourglassSandStream:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 45px;
+      left: 22px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid #fff;
+      animation: sandStream2 2s ease-in 0s infinite;
+    }
+
+    @keyframes sandStream1 {
+      0%, 50% { height: 0; top: 45px; }
+      60%, 85% { height: 40px; top: 10px; }
+      100% { height: 0; top: 10px; }
+    }
+
+    @keyframes sandStream2 {
+      0%, 50%, 91%, 100% { opacity: 0; }
+      51%, 90% { opacity: 1; }
+    }
+
+    .hourglassSand:before,
+    .hourglassSand:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 6px;
+      background-color: white;
+    }
+
+    .hourglassSand:before {
+      top: 10px;
+      width: 45px;
+      border-radius: 3px 3px 30px 30px;
+      animation: sandFillup 2s ease-in 0s infinite;
+    }
+
+    .hourglassSand:after {
+      border-radius: 30px 30px 3px 3px;
+      animation: sandDeplete 2s ease-in 0s infinite;
+    }
+
+    @keyframes sandFillup {
+      0%, 60% { opacity: 0; height: 0; }
+      100% { opacity: 1; height: 20px; }
+    }
+
+    @keyframes sandDeplete {
+      0%, 1%, 24% {
+        opacity: 1;
+        top: 60px;
+        height: 20px;
+        width: 42px;
+        left: 6px;
+      }
+
+      25%, 50% {
+        top: 56px;
+      }
+
+      90% {
+        height: 0;
+        width: 12px;
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⏳ الذهاب إلى الجيم مع Amine و Malek</h1>
+
+  <div class="hourglassBackground">
+    <div class="hourglassContainer">
+      <div class="hourglassCapTop"></div>
+      <div class="hourglassGlassTop"></div>
+      <div class="hourglassGlass"></div>
+      <div class="hourglassCurves"></div>
+      <div class="hourglassSandStream"></div>
+      <div class="hourglassSand"></div>
+      <div class="hourglassCapBottom"></div>
+    </div>
+  </div>
+
+  <div class="countdown" id="timer">--:--:--</div>
+
+  <script>
+    const targetTime = new Date();
+    targetTime.setHours(targetTime.getHours() + 2);
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        document.getElementById("timer").innerText = "🚀 حان وقت الذهاب!";
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerText =
+        `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html>
